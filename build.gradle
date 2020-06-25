@@ -74,6 +74,9 @@ dependencies {
     testCompile "org.grails:grails-web-testing-support"
 
     // removed grails-plugin-testing: https://github.com/grails/grails-core/issues/11293
+
+    compile 'edu.ucar:groovy-ncar-extensions:3.1.0-SNAPSHOT'
+
 }
 
 bootRun {
