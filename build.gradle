@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-version "0.1"
+version "0.1-SNAPSHOT"
 group "grails.ncar.extensions"
 
 apply plugin:"org.grails.grails-plugin"
@@ -22,9 +22,19 @@ apply plugin:"org.grails.grails-gsp"
 //apply plugin:"eclipse"
 //apply plugin:"idea"
 
+// EOL maven remote repo
+def internalMavenPublishUrl = 'file:////net/www_dev/data/html/maven2'
+def internalMavenWebUrl = 'https://data.dev.eol.ucar.edu/maven2/'
+
 repositories {
+    mavenLocal()    // ~/.m2/
+    maven { url internalMavenWebUrl }
+
     maven { url "https://repo.grails.org/grails/core" }
 }
+
+// make sure ALL tests & checks are run
+install.dependsOn ':build'
 
 configurations {
     developmentOnly
@@ -80,17 +90,27 @@ bootRun {
 // enable if you wish to package this plugin as a standalone application
 bootJar.enabled = false
 
+publishing {
+    repositories {
+        // DO NOT add mavenLocal() -- it will break all grails commands
+        // to publish to mavenLocal (~/.m2/) use "grails install"
+
+        maven { url internalMavenPublishUrl }
+    }
+}
+
 grailsPublish {
-    // TODO: Provide values here
+    // grails.org plugin auth
     user = 'user'
     key = 'key'
-    githubSlug = 'foo/bar'
+
+    githubSlug = 'NCAR/grails-ncar-extensions'
     license {
         name = 'Apache-2.0'
     }
-    title = "My Plugin"
-    desc = "Full plugin description"
-    developers = [johndoe:"John Doe"]
+    title = "Grails NCAR extensions"
+    desc = "Grails 4 extensions and utilities used at NCAR"
+    developers = [jja:"John J. Allison"]
 }
 
 //assets {
