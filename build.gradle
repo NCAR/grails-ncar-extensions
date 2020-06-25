@@ -4,19 +4,23 @@ buildscript {
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
-        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.0.10"
+
+        // unused
+        //classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.0.10"
     }
 }
 
 version "0.1"
 group "grails.ncar.extensions"
 
-apply plugin:"eclipse"
-apply plugin:"idea"
 apply plugin:"org.grails.grails-plugin"
 apply plugin:"org.grails.grails-plugin-publish"
-apply plugin:"asset-pipeline"
 apply plugin:"org.grails.grails-gsp"
+
+// unused
+//apply plugin:"asset-pipeline"
+//apply plugin:"eclipse"
+//apply plugin:"idea"
 
 repositories {
     maven { url "https://repo.grails.org/grails/core" }
@@ -51,11 +55,15 @@ dependencies {
     compileOnly "io.micronaut:micronaut-inject-groovy"
     console "org.grails:grails-console"
     profile "org.grails.profiles:web-plugin"
-    runtime "com.bertramlabs.plugins:asset-pipeline-grails:3.0.10"
+
+    // unused, enable this & other asset lines if css/js/etc assets are added
+    //runtime "com.bertramlabs.plugins:asset-pipeline-grails:3.0.10"
+
     testCompile "org.grails:grails-gorm-testing-support"
     testCompile "org.mockito:mockito-core"
     testCompile "org.grails:grails-web-testing-support"
-    testCompile "org.grails:grails-plugin-testing"
+
+    // removed grails-plugin-testing: https://github.com/grails/grails-core/issues/11293
 }
 
 bootRun {
@@ -68,8 +76,10 @@ bootRun {
     String springProfilesActive = 'spring.profiles.active'
     systemProperty springProfilesActive, System.getProperty(springProfilesActive)
 }
+
 // enable if you wish to package this plugin as a standalone application
 bootJar.enabled = false
+
 grailsPublish {
     // TODO: Provide values here
     user = 'user'
@@ -83,7 +93,6 @@ grailsPublish {
     developers = [johndoe:"John Doe"]
 }
 
-
-assets {
-    packagePlugin = true
-}
+//assets {
+//    packagePlugin = true
+//}
