@@ -1,0 +1,17 @@
+#!/bin/sh
+
+appfile=`find grails-app/init -depth -name Application.groovy`
+package=`awk '/^package/ { print $2; exit }' $appfile`
+group=`awk '/^group/ { gsub(/['\''"]/,"",$2); print $2; exit }' build.gradle`
+
+cp=`./gradlew printConsoleClasspath -q --console=plain --no-daemon 2>&1 | awk '/^CLASSPATH / { cp=$2 } END { print cp }'`
+
+exec /usr/bin/java \
+ -Dgrails.env=development -Dgrails.full.stacktrace=true \
+ -Dinfo.app.grailsVersion=4.0.1 \
+ -XX:+TieredCompilation -XX:TieredStopAtLevel=1 -XX:CICompilerCount=3 \
+ -Duser.country=US -Duser.language=en -Duser.variant=true \
+ "-Dinfo.app.name=${group}" -Dinfo.app.version=999.99-SNAPSHOT-SHELL \
+ $GRAILS_OPTS \
+ -cp $cp \
+ grails.ui.shell.GrailsShell "${package}.Application" "$@"

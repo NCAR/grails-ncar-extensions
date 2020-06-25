@@ -119,3 +119,14 @@ grailsPublish {
 //assets {
 //    packagePlugin = true
 //}
+
+// used by ./grailsShell
+task printConsoleClasspath(dependsOn:'classes') {
+    group = 'help'
+    description = 'prints my console classpath (for use by an external script)'
+    def files = sourceSets.main.runtimeClasspath + configurations.console
+    doLast {
+        print 'CLASSPATH '
+        println files.asPath
+    }
+}
