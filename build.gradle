@@ -10,8 +10,8 @@ buildscript {
     }
 }
 
-version "0.1-SNAPSHOT"
-group "grails.ncar.extensions"
+apply from:'application.gradle'
+group "edu.ucar"
 
 apply plugin:"org.grails.grails-plugin"
 apply plugin:"org.grails.grails-plugin-publish"
@@ -74,6 +74,9 @@ dependencies {
     testCompile "org.grails:grails-web-testing-support"
 
     // removed grails-plugin-testing: https://github.com/grails/grails-core/issues/11293
+
+    compile 'edu.ucar:groovy-ncar-extensions:3.1.0-SNAPSHOT'
+
 }
 
 bootRun {
@@ -116,3 +119,14 @@ grailsPublish {
 //assets {
 //    packagePlugin = true
 //}
+
+// used by ./grailsShell
+task printConsoleClasspath(dependsOn:'classes') {
+    group = 'help'
+    description = 'prints my console classpath (for use by an external script)'
+    def files = sourceSets.main.runtimeClasspath + configurations.console
+    doLast {
+        print 'CLASSPATH '
+        println files.asPath
+    }
+}
