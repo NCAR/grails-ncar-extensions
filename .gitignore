@@ -1,12 +1,25 @@
-Thumbs.db
-.DS_Store
-.gradle
-build/
-out/
-.idea
+# IDE support files
+/.classpath
+/.idea
+/.launch
+/.project
+/.settings
+/cobertura.ser
 *.iml
 *.ipr
 *.iws
-.project
-.settings
-.classpath
+*.launch
+
+# lame mapple cruft
+Thumbs.db
+.DS_Store
+
+# gradle/grails working files
+/.attach_*
+/.gradle
+/build
+/out
+
+# local overrides
+/local.gradle
+/local.groovy
