@@ -75,19 +75,31 @@ dependencies {
 
     // removed grails-plugin-testing: https://github.com/grails/grails-core/issues/11293
 
-    compile 'edu.ucar:groovy-ncar-extensions:3.1.0-SNAPSHOT'
+    compile 'edu.ucar:groovy-ncar-extensions:3.1.0'
 
 }
 
 bootRun {
+    ignoreExitValue true
+
     jvmArgs(
-        '-Dspring.output.ansi.enabled=always', 
-        '-noverify', 
+        '-Dspring.output.ansi.enabled=always',
+        '-noverify',
         '-XX:TieredStopAtLevel=1',
-        '-Xmx1024m')
+        '-Xmx2g'
+        // -Xmx2g -Xms1024M -XX:MaxMetaspaceSize=1g
+    )
+
     sourceResources sourceSets.main
     String springProfilesActive = 'spring.profiles.active'
     systemProperty springProfilesActive, System.getProperty(springProfilesActive)
+}
+
+tasks.withType(GroovyCompile) {
+    configure(groovyOptions) {
+        forkOptions.jvmArgs += ['-Xmx2g']
+        // -Xmx2g -Xms1024M -XX:MaxMetaspaceSize=1g
+    }
 }
 
 // enable if you wish to package this plugin as a standalone application
@@ -113,7 +125,7 @@ grailsPublish {
     }
     title = "Grails NCAR extensions"
     desc = "Grails 4 extensions and utilities used at NCAR"
-    developers = [jja:"John J. Allison"]
+    developers = [jja:"John J. Allison"]    // no way to add email to pom :(
 }
 
 //assets {
