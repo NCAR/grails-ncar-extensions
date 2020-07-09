@@ -22,13 +22,26 @@ apply plugin:"org.grails.grails-gsp"
 //apply plugin:"eclipse"
 //apply plugin:"idea"
 
-// EOL maven remote repo
-def internalMavenPublishUrl = 'file:////net/www_dev/data/html/maven2'
-def internalMavenWebUrl = 'https://data.dev.eol.ucar.edu/maven2/'
+// Grails uses gradle.properties so it's tracked by git;
+// we git-ignore this file so you can add local customizations.
+// See local.gradle.example
+// You can also use $GRADLE_USER_HOME/gradle.properties (aka $HOME/.gradle/gradle.properties)
+File localFile = new File('./local.gradle')
+if (localFile.exists()) apply from:localFile
+
+if (!project.hasProperty('urlTimeout')) ext['urlTimeout']=5000 // ms
 
 repositories {
     mavenLocal()    // ~/.m2/
-    maven { url internalMavenWebUrl }
+
+    // if we have a local maven defined, and it is reachable, then use it for dependencies
+    if ( project.hasProperty('internalMavenWebUrl') ) try {
+        if (project.internalMavenWebUrl?.toURL()?.getText(connectTimeout: urlTimeout, readTimeout: urlTimeout))
+            maven { url internalMavenWebUrl }
+    } catch (e) {
+        logger.warn "Error accessing internalMavenWebUrl ( $internalMavenWebUrl ), attempting to continue..."
+        logger.warn "$e"
+    }
 
     maven { url "https://repo.grails.org/grails/core" }
 }
@@ -110,7 +123,15 @@ publishing {
         // DO NOT add mavenLocal() -- it will break all grails commands
         // to publish to mavenLocal (~/.m2/) use "grails install"
 
-        maven { url internalMavenPublishUrl }
+        // if we have a local maven defined, and it is reachable, then use it
+        if ( project.hasProperty('internalMavenPublishUrl') ) try {
+            if (project.internalMavenPublishUrl.toURL().getText(connectTimeout: urlTimeout, readTimeout: urlTimeout))
+                maven { url internalMavenPublishUrl }
+        } catch (e) {
+            logger.warn "Error accessing internalMavenPublishUrl ( $internalMavenPublishUrl ), attempting to continue..."
+            logger.warn "$e"
+        }
+
     }
 }
 

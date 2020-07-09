@@ -1,0 +1,8 @@
+// maven remote repositories
+// you can also set these in $GRADLE_USER_HOME/gradle.properties (aka $HOME/.gradle/gradle.properties)
+
+// where to write for "publish-plugin"
+rootProject.internalMavenPublishUrl = 'file:///path/to/maven2'
+
+// where to read dependencies
+rootProject.internalMavenWebUrl = 'https://example.com/maven2/'
