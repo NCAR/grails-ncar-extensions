@@ -13,32 +13,36 @@ class GrailsNcarExtensionsGrailsPlugin extends Plugin {
 
     // TODO Fill in these fields
     def title = "Grails Ncar Extensions" // Headline display name of the plugin
-    def author = "Your name"
-    def authorEmail = ""
+    def author = "John J. Allison"
+    def authorEmail = "jja@ucar.edu"
     def description = '''\
-Brief summary/description of the plugin.
+Utilities and extensions for Grails 4 projects.
+Includes groovy-ncar-extensions.
 '''
     def profiles = ['web']
 
     // URL to the plugin's documentation
-    def documentation = "http://grails.org/plugin/grails-ncar-extensions"
+    def documentation = "https://ncar.github.io/grails-ncar-extensions/"
 
     // Extra (optional) plugin metadata
 
     // License: one of 'APACHE', 'GPL2', 'GPL3'
-//    def license = "APACHE"
+    def license = "APACHE"
 
     // Details of company behind the plugin (if there is one)
-//    def organization = [ name: "My Company", url: "http://www.my-company.com/" ]
+    def organization = [ name: "UCAR/NCAR/EOL", url: "https://data.eol.ucar.edu/" ]
 
-    // Any additional developers beyond the author specified above.
-//    def developers = [ [ name: "Joe Bloggs", email: "joe@bloggs.net" ]]
+    // Any additional project leaders beyond the author specified above.
+    def developers = [
+        //[ name: "Joe Bloggs", email: "joe@bloggs.net" ],
+    ]
 
     // Location of the plugin's issue tracker.
-//    def issueManagement = [ system: "JIRA", url: "http://jira.grails.org/browse/GPMYPLUGIN" ]
+//    def issueManagement = [ system: "JIRA", url: "https://jira.ucar.edu/browse/DATA" ]    // private
+    def issueManagement = [ system: "Github Issues", url: "https://github.com/NCAR/grails-ncar-extensions/issues" ]     // public
 
     // Online location of the plugin's browseable source code.
-//    def scm = [ url: "http://svn.codehaus.org/grails-plugins/" ]
+    def scm = [ url: "https://github.com/NCAR/grails-ncar-extensions" ]
 
     Closure doWithSpring() { {->
             // TODO Implement runtime spring config (optional)
