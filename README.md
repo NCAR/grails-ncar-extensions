@@ -1,19 +1,34 @@
 # grails-ncar-extensions
+
 Grails utilities and extensions plugin
 
 ## Development
 
+This plugin is developed for Grails 4.x with the matching Groovy 2.5.6 and Gradle 5.1.1.
+It may be helpful to set environment variables thusly:
+
+    GRAILS_OPTS=-server -Xmx1024M -Xms1024M -Dfile.encoding=UTF-8 -Djava.io.tmpdir=./build/tmp/java
+    JAVA_OPTS=-Dfile.encoding=UTF-8
+    GRADLE_OPTS=-Djava.io.tmpdir=./build/tmp/java
+
 Use `./grailsShell` to get a reasonable Grails shell (REPL).
 After exiting, you will still have to `^C`.
+TODO: worked with Grails 4.0.1, broken in 4.0.3
 
 ## Deployment
 
 Version number is set in `application.gradle` to avoid messing around in `build.gradle`.
 
 Use `./grailsw install` to install to your local Maven repo (e.g. `~/.m2/`).
-Use `./grailsw publish-plugin` to publish to the EOL internal Maven remote repo,
-defined by `internalMavenPublishUrl` in `build.gradle` (you can override this
-in `local.gradle`).
+Use `./grailsw publish-plugin` to publish to your internal Maven remote repo,
+defined by `internalMavenPublishUrl` in `local.gradle`.
+
+## History
+
+This plugin is a follow-up to the legcacy "ncareol-extensions" plugin
+for Grails 2.3.x, which has been archived at:
+
+    https://github.com/NCAR/grails-ncareol-extensions-plugin
 
 ## License
 

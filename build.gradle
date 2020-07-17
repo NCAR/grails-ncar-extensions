@@ -54,6 +54,9 @@ configurations {
     runtimeClasspath {
         extendsFrom developmentOnly
     }
+
+    // use slf4j-test instead
+    testCompile.exclude group: 'ch.qos.logback', module: 'logback-classic'
 }
 
 dependencies {
@@ -86,9 +89,15 @@ dependencies {
     testCompile "org.mockito:mockito-core"
     testCompile "org.grails:grails-web-testing-support"
 
+    // substitute in-memory queryable logging
+    testCompile 'uk.org.lidalia:slf4j-test:1.1.0'
+
     // removed grails-plugin-testing: https://github.com/grails/grails-core/issues/11293
 
     compile 'edu.ucar:groovy-ncar-extensions:3.1.0'
+
+    // we extend from MySQL57Dialect; the main app should override; but we try to keep in sync
+    compile "org.hibernate:hibernate-core:5.4.0.Final"
 
 }
 
