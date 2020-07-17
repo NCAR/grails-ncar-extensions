@@ -96,6 +96,9 @@ dependencies {
 
     compile 'edu.ucar:groovy-ncar-extensions:3.1.0'
 
+    // we extend from MySQL57Dialect; the main app should override; but we try to keep in sync
+    compile "org.hibernate:hibernate-core:5.4.0.Final"
+
 }
 
 bootRun {
