@@ -28,7 +28,7 @@ defined by `internalMavenPublishUrl` in `local.gradle`.
 This plugin is a follow-up to the legcacy "ncareol-extensions" plugin
 for Grails 2.3.x, which has been archived at:
 
-    https://github.com/NCAR/grails-ncareol-extensions-plugin
+ * https://github.com/NCAR/grails-ncareol-extensions-plugin
 
 ## License
 
