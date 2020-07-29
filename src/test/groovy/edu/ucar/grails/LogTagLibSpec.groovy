@@ -17,9 +17,16 @@ class LogTagLibSpec extends Specification implements TagLibUnitTest<LogTagLib> {
         logger.clear()
     }
 
-    void "test empty tag run"() {
-        expect:"no output and empty log msg went to a black hole"
-            '' == tagLib.logMsg().toString()
+    void "test empty tag log"() {
+        given:
+            def returnVal
+        when:"tag executed with no message argument"
+            returnVal = tagLib.logMsg()
+            loggingEvents = logger.loggingEvents
+        then:"no output and empty log message"
+            '' == returnVal.toString()
+            1 == loggingEvents.size()
+            '' == loggingEvents[0].message
     }
 
     void "test empty return"() {
@@ -28,10 +35,6 @@ class LogTagLibSpec extends Specification implements TagLibUnitTest<LogTagLib> {
     }
 
     void "test basic log"() {
-        given:
-            //def logger = TestLoggerFactory.getTestLogger(LogTagLib.class)
-            //logger.clear()
-            //def loggingEvents
         when:
             applyTemplate("<g:logMsg>$MESSAGE</g:logMsg>")
             loggingEvents = logger.loggingEvents
@@ -43,9 +46,6 @@ class LogTagLibSpec extends Specification implements TagLibUnitTest<LogTagLib> {
 
     void "test view message"() {
         given:
-            //def logger = TestLoggerFactory.getTestLogger(LogTagLib.class)
-            //logger.clear()
-            //def loggingEvents
             def expected = "foo : $MESSAGE"
         when:
             applyTemplate("<g:logMsg view=\"foo\">$MESSAGE</g:logMsg>")
@@ -57,10 +57,6 @@ class LogTagLibSpec extends Specification implements TagLibUnitTest<LogTagLib> {
     }
 
     void "test log levels"() {
-        given:
-            //def logger = TestLoggerFactory.getTestLogger(LogTagLib.class)
-            //logger.clear()
-            //def loggingEvents
         when:
             LEVELS.each {
                 applyTemplate("<g:logMsg level=\"$it\">$MESSAGE via $it</g:logMsg>")
