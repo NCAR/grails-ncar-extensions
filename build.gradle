@@ -88,6 +88,7 @@ dependencies {
     testCompile "org.grails:grails-gorm-testing-support"
     testCompile "org.mockito:mockito-core"
     testCompile "org.grails:grails-web-testing-support"
+    testCompile 'org.jsoup:jsoup:1.13.1'
 
     // substitute in-memory queryable logging
     testCompile 'uk.org.lidalia:slf4j-test:1.1.0'

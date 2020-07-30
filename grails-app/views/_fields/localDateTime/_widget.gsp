@@ -1,4 +1,4 @@
-<%@ page import="zingggg.DatetimeFormatters"
+<%@ page import="edu.ucar.grails.DatetimeFormatters"
 %><input type="hidden" name="${property}" value="struct"
 /><input type="text" name="${property}_year" id="${property}_year" aria-labelledby="${property}" title="year" value="${value ? value.format(DatetimeFormatters.YEAR) : ''}" size="4" maxlength="4" tabindex="1"
 />-<input type="text" name="${property}_month" id="${property}_month" aria-labelledby="${property}" title="month" value="${value ? value.format(DatetimeFormatters.MONTH) : ''}" size="2" maxlength="2" tabindex="1"

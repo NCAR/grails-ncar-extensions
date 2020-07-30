@@ -1,0 +1,84 @@
+f:widget tests don't work, but the templates are used by an app that includes this plugin
+
+run-app logs (zingggg is the test app, zinpppp is a test plugin):
+
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /dataset/edit/endDate/widget
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /dataset/edit/localDateTime/widget
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /dataset/edit/widget
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /dataset/endDate/widget
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /dataset/localDateTime/widget
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /dataset/widget
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /_fields/dataset/endDate/widget
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /_fields/domainClass/endDate/widget
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /_fields/localDateTime/widget
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : found template /_fields/localDateTime/widget 
+20:10:58 DEBUG zingggg.LogTagLib                        : 
+bean isa class zinpppp.Dataset = 0.0: Lost dataset - DO NOT USE
+property isa class java.lang.String = endDate
+type isa class java.lang.Class = class java.time.LocalDateTime
+value isa class java.time.LocalDateTime = 9999-12-31T23:59:59
+
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /dataset/edit/endDate/wrapper
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /dataset/edit/localDateTime/wrapper
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /dataset/edit/wrapper
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /dataset/endDate/wrapper
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /dataset/localDateTime/wrapper
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /dataset/wrapper
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /_fields/dataset/endDate/wrapper
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /_fields/domainClass/endDate/wrapper
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /_fields/localDateTime/wrapper
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /_fields/temporal/wrapper
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /_fields/temporalAccessor/wrapper
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /_fields/temporalAdjuster/wrapper
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /_fields/chronoLocalDateTime/wrapper
+20:10:58 DEBUG g.p.f.FormFieldsTemplateService          : looking for template with path /_fields/default/wrapper
+
+
+src/test/groovy/edu/ucar/fields/FieldsSpec.groovy
+- guess these tests need the BuildsAccessorFactory
+
+    void 'widget selects correct year for Instant'() {
+        given:
+            def property = 'instant'
+            def view = "/_fields/$property/_widget.gsp"
+            def templateName = '/templates' + view
+            def fileName = './grails-app/views' + view
+            def viewFile = new File(fileName)
+        when:
+            views[templateName] = viewFile.text
+            println "view $view = " + views[templateName]
+            def result = applyTemplate('<f:widget bean="testBean" property="' + property + '" />',
+                [testBean:epochZeroDatesInstance]
+                )
+            def doc = Jsoup.parse(result)
+        then:
+            println result
+            result
+            doc
+            '1970'.equals doc.select("#${property}_year option[selected=selected]").text()
+    }
+
+    void 'widget uses provided text for Instant template'() {
+        given:
+            def property = 'instant'
+            def view = "/_fields/$property/_widget.gsp"
+            def templateName = '/templates' + view
+        when:
+            views[templateName] = '<div>foo bar</div>'
+            println "view $view = " + views[templateName]
+            def result = applyTemplate('<f:widget bean="testBean" property="' + property + '" />',
+                [testBean:epochZeroDatesInstance]
+                )
+            def doc = Jsoup.parse(result)
+        then:
+            println result
+            result.contains('foo bar')
+            doc
+            doc.text.contains('foo bar')
+    }
+
+https://github.com/grails-fields-plugin/grails-fields/blob/master/src/test/groovy/grails/plugin/formfields/DisplayWidgetSpec.groovy
+https://github.com/grails-fields-plugin/grails-fields/blob/master/src/test/groovy/grails/plugin/formfields/BuildsAccessorFactory.groovy
+https://github.com/grails-fields-plugin/grails-fields/blob/master/src/test/groovy/grails/plugin/formfields/FormFieldsTemplateServiceSpec.groovy
+https://github.com/grails-fields-plugin/grails-fields/blob/master/src/main/groovy/grails/plugin/formfields/FormFieldsTemplateService.groovy
+
