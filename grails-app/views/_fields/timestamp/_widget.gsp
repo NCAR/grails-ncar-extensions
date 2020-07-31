@@ -1,4 +1,4 @@
-<%@ page import="zingggg.DatetimeFormatters"
+<%@ page import="edu.ucar.grails.DatetimeFormatters"
 %><g:set var="localValue" value="${value.toLocalDateTime()}"
 /><input type="hidden" name="${property}" value="struct"
 /><input type="text" name="${property}_year" id="${property}_year" aria-labelledby="${property}" title="year" value="${value ? DatetimeFormatters.formatYear(localValue) : ''}" size="4" maxlength="4" tabindex="1"

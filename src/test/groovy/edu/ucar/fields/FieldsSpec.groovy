@@ -14,20 +14,18 @@ import org.grails.datastore.mapping.model.MappingContext
 import org.grails.spring.beans.factory.InstanceFactoryBean
 import grails.plugin.formfields.BeanPropertyAccessorFactory
 import grails.core.support.proxy.DefaultProxyHandler
+import org.jsoup.Jsoup
 
 /*
  * setups/cleanups copied from:
  *  grails.plugin.formfields.taglib.AbstractFormFieldsTagLibSpec
- * which we can't just extend since it's not in any jar (?)
+ * see also grails.plugin.formfields.BuildsAccessorFactory
+ * neither of which we can just extend since they're in src/test not in any jar
  */
 class FieldsSpec extends Specification
-    implements TagLibUnitTest<FormFieldsTagLib>,
-               DataTest,
-               GrailsWebUnitTest
+    implements TagLibUnitTest<FormFieldsTagLib>, DataTest
 {
     def mockFormFieldsTemplateService = Mock(FormFieldsTemplateService)
-
-    Dates epochZeroDatesInstance
 
     def setupSpec() {
         edu.ucar.util.UtcUtil.setZone()     // UTC!!!
@@ -59,7 +57,6 @@ class FieldsSpec extends Specification
     }
 
     def setup() {
-        epochZeroDatesInstance = Dates.epochZero()
         mockFormFieldsTemplateService.getTemplateFor('wrapper') >> "wrapper"
         mockFormFieldsTemplateService.getTemplateFor('widget') >> "widget"
         mockFormFieldsTemplateService.getTemplateFor('displayWrapper') >> "displayWrapper"
@@ -77,24 +74,48 @@ class FieldsSpec extends Specification
     }
 
     void 'instance not null'() {
-        expect:
-            null != epochZeroDatesInstance
+        given:"a test domain class instance"
+            def testBean = Dates.epochZero()
+        expect:"the object exists"
+            null != testBean
     }
 
     void 'display of epoch zero has correct year'() {
-        when:
+        given:"test domainclass bean for epoch zero"
+            def testBean = Dates.epochZero()
+        when:"a simple list template is provided"
             views['/templates/_fields/_list.gsp'] = '''\
 <g:each in="${domainProperties}">
 ${it.name} = ${body(it)}
 </g:each>
 '''
-            def result = applyTemplate('<f:display bean="epochZeroDatesInstance" />',
-                [epochZeroDatesInstance:epochZeroDatesInstance]
+            def result = applyTemplate('<f:display bean="testBean" />',
+                [testBean:testBean]
                 )
-        then:
+        then:"correct property strings are displayed"
+            result
             result.contains('1970')
             !result.contains('1969')    // UTC!!!
+            result.contains('instant = 1970')
     }
+
+    void 'widget selects correct year for java.util.Date'() {
+        given:
+            def testBean = Dates.epochZero()
+        when:"default templates in the plugin are applied"
+            def result = applyTemplate('<f:widget bean="testBean" property="utilDate" />',
+                [testBean:testBean]
+                )
+            def doc = Jsoup.parse(result)
+        then:"correct year is pre-selected"
+            result
+            doc
+            '1970'.equals doc.select('#utilDate_year option[selected=selected]').text()
+    }
+
+    // TODO test finding and using our added templates
+    // probably in another tester copied from FormFieldsTemplateServiceSpec (??)
+    // currently here we always get "" from applyTemplate
 
 }
 
